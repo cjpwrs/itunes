@@ -5,16 +5,43 @@ angular.module('itunes').controller('mainCtrl', function($scope, itunesService){
   $scope.gridOptions = { 
       data: 'songData',
       height: '110px',
+      filterOptions: $scope.selected,
       sortInfo: {fields: ['Song', 'Artist', 'Collection', 'Type'], directions: ['asc']},
       columnDefs: [
         {field: 'Play', displayName: 'Play', width: '40px', cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a href="{{row.getProperty(col.field)}}"><img src="http://www.icty.org/x/image/Miscellaneous/play_icon30x30.png"></a></div>'},
+        {field: 'Song', displayName: 'Song'},
         {field: 'Artist', displayName: 'Artist'},
         {field: 'Collection', displayName: 'Collection'},
         {field: 'AlbumArt', displayName: 'Album Art', width: '110px', cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><img src="{{row.getProperty(col.field)}}"></div>'},
         {field: 'Type', displayName: 'Type'},
+        {field: 'SinglePrice', displayName: 'Single Price'},
         {field: 'CollectionPrice', displayName: 'Collection Price'},
       ]
   };
+
+    $scope.defaultInfo = {
+        search: '',
+        mediaType: 'all',
+        sortBy: 'artistName'
+    }
+
+    $scope.foptions = [
+        {label :'All',
+         value: 'all'},
+        {label: 'Music Video',
+         value: 'musicVideo'},
+        {label: 'Movie',
+         value: 'movie'},
+        {label:'Music',
+         value: 'musicTrack'},
+        {label:'Podcast',
+         value: 'podcast'},
+        {label: 'TV Show',
+         value: 'tvEpisode'}
+    ];
+
+    $scope.selected ="music-video" //$scope.foptions[0].value;
+    console.log($scope.selected);
 
   //Our controller is what's going to connect our 'heavy lifting' itunesService with our view (index.html) so our user can see the results they get back from itunes.
 
@@ -28,11 +55,19 @@ angular.module('itunes').controller('mainCtrl', function($scope, itunesService){
   //Also note that that method should be retuning a promise, so you could use .then in this function.
     
     //Code here
+    $scope.getSongData = function(){
+        itunesService.getArtist($scope.artist, $scope.selected.value)
+            .then(function(response){
+                $scope.songData = response;
+                console.log($scope.songData);
+            })
+    }
 
 
   //Check that the above method is working by entering a name into the input field on your web app, and then console.log the result
 
     //Code here
+ 
 
 
   //If everything worked you should see a huge array of objects inside your console. That's great! But unfortunately that's not what ng-grid is expecting. What you need to do now

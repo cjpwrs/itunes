@@ -15,8 +15,8 @@
           </div>
           <form class="navbar-form navbar-left" role="search">
             <div class="form-group">
-              <input type="text" class="form-control" ng-model="artist" placeholder="Artist Name" >
-              <button class="btn btn-primary" ng-click="getSongData()"> Submit </button>
+              <input type="text" class="form-control" ng-model="artist" ng-change="getSongData()" placeholder="Artist Name" >
+              <select default="All" ng-change="getSongData()" ng-options="foption as foption.label for foption in foptions track by foption.value" ng-model="selected"></select>
             </div>
           </form>
         </div>
